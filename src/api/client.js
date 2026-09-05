@@ -1,4 +1,4 @@
-const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3000"
+const BASE_URL = import.meta.env.BACKEND_URI || "http://localhost:3000"
 const TOKEN_KEY = "ems_token"
 const ROLE_KEY = "ems_role"
 

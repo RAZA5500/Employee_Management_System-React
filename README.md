@@ -195,7 +195,7 @@ From there, log into the Admin portal and use **Add Employee** to create every s
 
 | Variable | Description |
 |---|---|
-| `VITE_API_URL` | Base URL of the backend API |
+| `BACKEND_URI` | Base URL of the backend API |
 
 ## 📡 API Overview
 
