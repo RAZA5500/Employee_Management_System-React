@@ -30,7 +30,7 @@
 
 > ⚠️ The employee account uses a **one-time temporary password**. On first login you'll be prompted to set your own — that's an intentional security feature (see [Security](#-authentication--security)), not a bug.
 
-🔗 **Live App:** _(add your Vercel URL here once the frontend is deployed)_
+🔗 **Live App:** [employee-management-system-react-steel.vercel.app](https://employee-management-system-react-steel.vercel.app)
 🔗 **Live API:** [ems-backend-e8ie.onrender.com](https://ems-backend-e8ie.onrender.com)
 
 ---
