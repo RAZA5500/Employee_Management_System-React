@@ -61,15 +61,15 @@ Every workflow in the app is backed by real, validated API calls — there is no
 
 | Dashboard | Employees |
 |---|---|
-| ![Dashboard](docs/screenshots/dashboard.png) | ![Employees](docs/screenshots/employees.png) |
+| ![Dashboard](../docs/screenshots/dashboard.png) | ![Employees](../docs/screenshots/employees.png) |
 
 | Leave Management | Payslips |
 |---|---|
-| ![Leave](docs/screenshots/leave.png) | ![Payslips](docs/screenshots/payslips.png) |
+| ![Leave](../docs/screenshots/leave.png) | ![Payslips](../docs/screenshots/payslips.png) |
 
 | Attendance | Login Portal |
 |---|---|
-| ![Attendance](docs/screenshots/attendance.png) | ![Login](docs/screenshots/login.png) |
+| ![Attendance](../docs/screenshots/attendance.png) | ![Login](../docs/screenshots/login.png) |
 
 ## ✨ Features
 
