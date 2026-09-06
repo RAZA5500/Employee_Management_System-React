@@ -25,12 +25,18 @@
 
 | Portal | Email | Password | Notes |
 |---|---|---|---|
-| 🛡️ **Admin** | `admin@gmail.com` | `12345678` | Full access — manage employees, approve leave, run payroll |
-| 👤 **Employee** | `employee@gmail.com` | `12345678` | Self-service — attendance, leave requests, payslips |
+| 🛡️ **Admin** | `admin@gmail.com` | `12345678` | 🔒 Locked · Full access — manage employees, approve leave, run payroll |
+| 👤 **Employee** | `employee@gmail.com` | `12345678` | 🔒 Locked · Self-service — attendance, leave requests, payslips |
 
-> 🔒 Both accounts are **locked demo accounts**: their name, email and password can't be changed, and they can't be deleted, by anyone — not even by an admin editing them. So the credentials above always work. Trying it anyway shows a "not allowed" toast and the API rejects the request with `403`. Everything else in the app is fully editable.
+> ### 🔒 These credentials can never be changed
 >
-> ⚠️ The forced "set your own password" prompt still applies to **real** employees an admin creates — they're provisioned with a temporary password (see [Security](#-authentication--security)). Demo accounts are exempt.
+> Both are **shared demo accounts**, so the app refuses to let *anyone* — including an admin editing them from the Employees page — change their **name, email or password**, or delete them. The logins above will always work.
+>
+> Attempts are blocked on both sides: the UI shows a **"not allowed" toast**, and the API rejects the request with **`403 Forbidden`** for anyone calling it directly.
+>
+> Everything else works normally — the demo employee's department, salary, bio, leave, attendance and payslips are all still fully editable.
+>
+> ⚠️ The forced "set your own password" prompt still applies to **real** employees an admin creates — they're provisioned with a temporary password (see [Security](#-authentication--security)). Demo accounts are exempt, since their password is fixed.
 
 🔗 **Live App:** [employee-management-system-react-steel.vercel.app](https://employee-management-system-react-steel.vercel.app)
 🔗 **Live API:** [ems-backend-e8ie.onrender.com](https://ems-backend-e8ie.onrender.com)
@@ -192,12 +198,14 @@ From there, log into the Admin portal and use **Add Employee** to create every s
 |---|---|
 | `MONGO_URI` | MongoDB connection string (local or Atlas) |
 | `JWT_SECRET` | Secret used to sign JWTs |
+| `DEMO_ACCOUNT_EMAILS` | *Optional.* Comma-separated emails of the locked demo accounts. Defaults to `admin@gmail.com,employee@gmail.com` |
 
 **`client/.env`** / **`client/.env.production`**
 
 | Variable | Description |
 |---|---|
 | `BACKEND_URI` | Base URL of the backend API |
+| `VITE_DEMO_ACCOUNT_EMAILS` | *Optional.* Same list as `DEMO_ACCOUNT_EMAILS`, so the UI can warn before the request goes out. Keep both in sync |
 
 ## 📡 API Overview
 
