@@ -1,5 +1,6 @@
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { api, clearSession, getRole, getToken, setSession } from '../api/client'
+import { isDemoAccount } from '../assets/assets'
 
 const AuthContext = createContext(null)
 
@@ -44,17 +45,22 @@ export const AuthProvider = ({ children }) => {
         setProfile((p) => (p ? { ...p, mustChangePassword: false } : p))
     }, [])
 
+    const isDemo = isDemoAccount(profile?.email)
+
     const value = useMemo(() => ({
         token,
         role,
         profile,
+        isDemo,
         isAuthenticated: !!token,
-        mustChangePassword: !!profile?.mustChangePassword,
+        // demo accounts keep their published password, so they are never asked
+        // to replace it — that prompt would be a dead end for them
+        mustChangePassword: !isDemo && !!profile?.mustChangePassword,
         login,
         logout,
         markPasswordChanged,
         refetchProfile,
-    }), [token, role, profile, login, logout, markPasswordChanged, refetchProfile])
+    }), [token, role, profile, isDemo, login, logout, markPasswordChanged, refetchProfile])
 
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }

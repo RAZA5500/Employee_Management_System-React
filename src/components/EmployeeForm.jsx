@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
-import { Loader2Icon } from 'lucide-react'
+import { Loader2Icon, LockIcon } from 'lucide-react'
 import toast from 'react-hot-toast'
-import { DEPARTMENTS } from '../assets/assets'
+import { DEMO_LOCK_MESSAGE, DEPARTMENTS, isDemoAccount } from '../assets/assets'
 import { api } from '../api/client'
 
 const EMPLOYMENT_STATUSES = ["ACTIVE", "INACTIVE", "ON_LEAVE", "TERMINATED"]
@@ -10,13 +10,25 @@ const EmployeeForm = ({ initialData, onSuccess, onCancel }) => {
 
     const [loading, setLoading] = useState(false)
     const isEditMode = !!initialData
+    const isDemoEmployee = isEditMode && isDemoAccount(initialData?.email)
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setLoading(true)
 
         const formData = new FormData(e.target)
         const data = Object.fromEntries(formData.entries())
+
+        const renamesDemoEmployee = isDemoEmployee && (
+            data.firstName !== initialData.firstName ||
+            data.lastName !== initialData.lastName ||
+            data.email !== initialData.email
+        )
+        if (renamesDemoEmployee) {
+            toast.error(DEMO_LOCK_MESSAGE)
+            return
+        }
+
+        setLoading(true)
 
         const employee = {
             firstName: data.firstName,
@@ -62,6 +74,16 @@ const EmployeeForm = ({ initialData, onSuccess, onCancel }) => {
         <h3 className="font-medium mb-6 pb-4 border-b border-slate-100">
           Personal Information
         </h3>
+        {isDemoEmployee && (
+          <div className="flex items-start gap-3 rounded-xl border border-amber-200 bg-amber-50 p-3.5 mb-6 text-sm text-amber-800">
+            <LockIcon className="w-4 h-4 mt-0.5 shrink-0" />
+            <p>
+              This is the <span className="font-medium">shared demo employee</span>. Its name and
+              email are locked so the published sign-in keeps working — the rest of the profile
+              is still editable.
+            </p>
+          </div>
+        )}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 text-sm text-slate-700">
           <div>
             <label htmlFor="" className="block mb-2">

@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react'
-import { EyeIcon, EyeOffIcon, Loader2Icon } from 'lucide-react'
+import { EyeIcon, EyeOffIcon, Loader2Icon, LockIcon } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { api } from '../api/client'
 import { useAuth } from '../context/AuthContext'
+import { DEMO_LOCK_MESSAGE } from '../assets/assets'
 
 const Settings = () => {
 
-  const { profile, refetchProfile, markPasswordChanged } = useAuth()
+  const { profile, isDemo, refetchProfile, markPasswordChanged } = useAuth()
   const [firstName, setFirstName] = useState("")
   const [lastName, setLastName] = useState("")
   const [email, setEmail] = useState("")
@@ -32,6 +33,11 @@ const Settings = () => {
 
     if (!isProfileDirty) return
 
+    if (isDemo) {
+      toast.error(DEMO_LOCK_MESSAGE)
+      return
+    }
+
     setProfileLoading(true)
     try {
       await api.patch('/users/me', {
@@ -50,6 +56,11 @@ const Settings = () => {
 
   const handlePasswordSubmit = async (e) => {
     e.preventDefault()
+
+    if (isDemo) {
+      toast.error(DEMO_LOCK_MESSAGE)
+      return
+    }
 
     const formData = new FormData(e.target)
     const data = Object.fromEntries(formData.entries())
@@ -89,6 +100,19 @@ const Settings = () => {
       </div>
 
       <div className="space-y-6">
+        {/* ==== demo account notice ==== */}
+
+        {isDemo && (
+          <div className="flex items-start gap-3 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800">
+            <LockIcon className="w-4 h-4 mt-0.5 shrink-0" />
+            <p>
+              You're signed in with a <span className="font-medium">shared demo account</span>.
+              Its name, email and password are locked so everyone else can keep signing in —
+              every other feature works as normal.
+            </p>
+          </div>
+        )}
+
         {/* ==== profile information ==== */}
 
         <form onSubmit={handleProfileSubmit} className="card p-5 sm:p-6">

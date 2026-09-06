@@ -28,7 +28,9 @@
 | 🛡️ **Admin** | `admin@gmail.com` | `12345678` | Full access — manage employees, approve leave, run payroll |
 | 👤 **Employee** | `employee@gmail.com` | `12345678` | Self-service — attendance, leave requests, payslips |
 
-> ⚠️ The employee account uses a **one-time temporary password**. On first login you'll be prompted to set your own — that's an intentional security feature (see [Security](#-authentication--security)), not a bug.
+> 🔒 Both accounts are **locked demo accounts**: their name, email and password can't be changed, and they can't be deleted, by anyone — not even by an admin editing them. So the credentials above always work. Trying it anyway shows a "not allowed" toast and the API rejects the request with `403`. Everything else in the app is fully editable.
+>
+> ⚠️ The forced "set your own password" prompt still applies to **real** employees an admin creates — they're provisioned with a temporary password (see [Security](#-authentication--security)). Demo accounts are exempt.
 
 🔗 **Live App:** [employee-management-system-react-steel.vercel.app](https://employee-management-system-react-steel.vercel.app)
 🔗 **Live API:** [ems-backend-e8ie.onrender.com](https://ems-backend-e8ie.onrender.com)
@@ -220,6 +222,7 @@ From there, log into the Admin portal and use **Add Employee** to create every s
 - Passwords hashed with `bcryptjs`; changing a password requires the current one
 - New employee accounts are provisioned with a temporary password and a `mustChangePassword` flag — the app blocks all navigation with a mandatory "set your password" modal until it's changed
 - Ownership checks everywhere: employees can only ever see their own leave, payslip, and attendance records — never another employee's
+- Shared demo accounts are immutable: the API rejects any change to their name, email, or password — and any attempt to delete them — with `403`, whoever is signed in. The list lives in `DEMO_ACCOUNT_EMAILS` (server) / `VITE_DEMO_ACCOUNT_EMAILS` (client)
 
 ## ☁️ Deployment
 

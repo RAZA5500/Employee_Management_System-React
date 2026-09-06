@@ -1,10 +1,21 @@
 import { PencilIcon, Trash2Icon } from 'lucide-react';
 import React, { useState } from 'react'
+import toast from 'react-hot-toast'
 import ConfirmDialog from './ConfirmDialog'
+import { DEMO_DELETE_MESSAGE, isDemoAccount } from '../assets/assets'
 
 const EmployeeCard = ({ employee, onDelete, onEdit }) => {
 
     const [showConfirm, setShowConfirm] = useState(false)
+    const isDemoEmployee = isDemoAccount(employee.email)
+
+    const handleDeleteClick = () => {
+        if (isDemoEmployee) {
+            toast.error(DEMO_DELETE_MESSAGE)
+            return
+        }
+        setShowConfirm(true)
+    }
 
     const handleDelete = () => {
         setShowConfirm(false)
@@ -34,6 +45,14 @@ const EmployeeCard = ({ employee, onDelete, onEdit }) => {
             DELETED
           </span>
         )}
+        {isDemoEmployee && (
+          <span
+            title="Shared demo account — identity locked, cannot be deleted"
+            className="bg-amber-100 font-semibold text-amber-800 px-2.5 py-1 text-xs rounded-lg shadow-sm"
+          >
+            DEMO
+          </span>
+        )}
       </div>
       {!employee.isDeleted && (
         <div className="absolute inset-0 bg-linear-to-t from-indigo-700/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end justify-center pb-6 gap-3">
@@ -43,7 +62,7 @@ const EmployeeCard = ({ employee, onDelete, onEdit }) => {
           >
             <PencilIcon className="w-4 h-4" />
           </button>
-          <button onClick={() => setShowConfirm(true)} className="p-2.5 bg-white/90 backdrop-blur-sm text-slate-700 hover:text-rose-600 rounded-xl shadow-lg transition-all hover:scale-105 disabled:opacity-50">
+          <button onClick={handleDeleteClick} className="p-2.5 bg-white/90 backdrop-blur-sm text-slate-700 hover:text-rose-600 rounded-xl shadow-lg transition-all hover:scale-105 disabled:opacity-50">
             <Trash2Icon className="w-4 h-4" />
           </button>
         </div>

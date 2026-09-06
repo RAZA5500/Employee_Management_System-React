@@ -4,6 +4,22 @@ export const LEAVE_TYPES = ["ANNUAL", "CASUAL", "SICK", "UNPAID"];
 
 export const LEAVE_STATUSES = ["PENDING", "APPROVED", "REJECTED"];
 
+// Shared demo/test accounts. Their credentials are published in the README, so
+// their name, email and password stay fixed — the API rejects any change too,
+// this list only lets the UI warn before the request goes out.
+export const DEMO_ACCOUNT_EMAILS = (
+    import.meta.env.VITE_DEMO_ACCOUNT_EMAILS || "admin@gmail.com,employee@gmail.com"
+).split(",").map((email) => email.trim().toLowerCase()).filter(Boolean);
+
+export const DEMO_LOCK_MESSAGE = "Demo account — name, email and password can't be changed";
+
+export const DEMO_DELETE_MESSAGE = "Demo account — this account can't be deleted";
+
+export function isDemoAccount(email) {
+    if (!email) return false;
+    return DEMO_ACCOUNT_EMAILS.includes(email.trim().toLowerCase());
+}
+
 export const MONTH_NAMES = [
     "January", "February", "March", "April", "May", "June",
     "July", "August", "September", "October", "November", "December",
