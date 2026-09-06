@@ -13,9 +13,16 @@ const PERMISSIONS_POLICY =
 export default defineConfig({
   plugins: [react(), tailwindcss()],
   server: {
+    // Pinned: the API's CORS allowlist names this exact port. Without
+    // strictPort, Vite silently moves to 5174 when 5173 is busy and every
+    // request then dies as "Failed to fetch". Better to fail loudly here.
+    port: 5173,
+    strictPort: true,
     headers: { "Permissions-Policy": PERMISSIONS_POLICY },
   },
   preview: {
+    port: 4173,
+    strictPort: true,
     headers: { "Permissions-Policy": PERMISSIONS_POLICY },
   },
 });
