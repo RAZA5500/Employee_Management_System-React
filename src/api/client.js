@@ -1,4 +1,14 @@
-const BASE_URL = import.meta.env.VITE_BACKEND_URI || "http://localhost:3000"
+const LOCAL_API = "http://localhost:3000"
+const DEPLOYED_API = "https://ems-backend-e8ie.onrender.com"
+
+// Vite inlines VITE_BACKEND_URI at build time. When it is missing (the host
+// never had it set), fall back by where the app is actually running: a
+// deployed build pointing at localhost would ask every visitor's own machine
+// for the API, which fails for all of them.
+const isLocalHost = ["localhost", "127.0.0.1"].includes(window.location.hostname)
+
+const BASE_URL =
+    import.meta.env.VITE_BACKEND_URI || (isLocalHost ? LOCAL_API : DEPLOYED_API)
 const TOKEN_KEY = "ems_token"
 const ROLE_KEY = "ems_role"
 
