@@ -39,7 +39,7 @@
 > ⚠️ The forced "set your own password" prompt still applies to **real** employees an admin creates — they're provisioned with a temporary password (see [Security](#-authentication--security)). Demo accounts are exempt, since their password is fixed.
 
 🔗 **Live App:** [employee-management-system-react-steel.vercel.app](https://employee-management-system-react-steel.vercel.app)
-🔗 **Live API:** [ems-backend-e8ie.onrender.com](https://ems-backend-e8ie.onrender.com)
+<!-- 🔗 **Live API:** [ems-backend-e8ie.onrender.com](https://ems-backend-e8ie.onrender.com) -->
 
 ---
 
