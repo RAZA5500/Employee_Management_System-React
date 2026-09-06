@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import { EyeIcon, EyeOffIcon, Loader2Icon, LockIcon } from 'lucide-react'
+import { Loader2Icon } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { api } from '../api/client'
 import { useAuth } from '../context/AuthContext'
 import { DEMO_LOCK_MESSAGE } from '../assets/assets'
+import DemoNotice from '../components/DemoNotice'
+import PageHeader from '../components/PageHeader'
+import PasswordInput from '../components/PasswordInput'
 
 const Settings = () => {
 
@@ -13,9 +16,6 @@ const Settings = () => {
   const [email, setEmail] = useState("")
   const [profileLoading, setProfileLoading] = useState(false)
   const [passwordLoading, setPasswordLoading] = useState(false)
-  const [showCurrent, setShowCurrent] = useState(false)
-  const [showNew, setShowNew] = useState(false)
-  const [showConfirm, setShowConfirm] = useState(false)
 
   useEffect(() => {
     setFirstName(profile?.fName || "")
@@ -94,23 +94,17 @@ const Settings = () => {
     <div className="animate-fade-in">
       {/* ==== header ==== */}
 
-      <div className="mb-8">
-        <h1 className="page-title">Settings</h1>
-        <p className="page-subtitle">Manage your account preferences</p>
-      </div>
+      <PageHeader title="Settings" subtitle="Manage your account preferences" />
 
       <div className="space-y-6">
         {/* ==== demo account notice ==== */}
 
         {isDemo && (
-          <div className="flex items-start gap-3 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800">
-            <LockIcon className="w-4 h-4 mt-0.5 shrink-0" />
-            <p>
-              You're signed in with a <span className="font-medium">shared demo account</span>.
-              Its name, email and password are locked so everyone else can keep signing in —
-              every other feature works as normal.
-            </p>
-          </div>
+          <DemoNotice>
+            You're signed in with a <span className="font-medium">shared demo account</span>.
+            Its name, email and password are locked so everyone else can keep signing in —
+            every other feature works as normal.
+          </DemoNotice>
         )}
 
         {/* ==== profile information ==== */}
@@ -180,69 +174,15 @@ const Settings = () => {
           </h3>
 
           <div className="grid grid-cols-1 gap-5 text-sm text-slate-700">
-            <div>
-              <label htmlFor="" className="block mb-2">
-                Current Password
-              </label>
-              <div className="relative">
-                <input
-                  type={showCurrent ? "text" : "password"}
-                  name="currentPassword"
-                  required
-                  className="pr-11"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowCurrent(!showCurrent)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
-                >
-                  {showCurrent ? <EyeOffIcon size={18} /> : <EyeIcon size={18} />}
-                </button>
-              </div>
-            </div>
+            <PasswordInput label="Current Password" name="currentPassword" required />
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-              <div>
-                <label htmlFor="" className="block mb-2">
-                  New Password
-                </label>
-                <div className="relative">
-                  <input
-                    type={showNew ? "text" : "password"}
-                    name="newPassword"
-                    required
-                    minLength={8}
-                    className="pr-11"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowNew(!showNew)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
-                  >
-                    {showNew ? <EyeOffIcon size={18} /> : <EyeIcon size={18} />}
-                  </button>
-                </div>
-              </div>
-              <div>
-                <label htmlFor="" className="block mb-2">
-                  Confirm New Password
-                </label>
-                <div className="relative">
-                  <input
-                    type={showConfirm ? "text" : "password"}
-                    name="confirmPassword"
-                    required
-                    minLength={8}
-                    className="pr-11"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowConfirm(!showConfirm)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
-                  >
-                    {showConfirm ? <EyeOffIcon size={18} /> : <EyeIcon size={18} />}
-                  </button>
-                </div>
-              </div>
+              <PasswordInput label="New Password" name="newPassword" required minLength={8} />
+              <PasswordInput
+                label="Confirm New Password"
+                name="confirmPassword"
+                required
+                minLength={8}
+              />
             </div>
           </div>
 

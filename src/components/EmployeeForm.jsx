@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
-import { Loader2Icon, LockIcon } from 'lucide-react'
+import { Loader2Icon } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { DEMO_LOCK_MESSAGE, DEPARTMENTS, isDemoAccount } from '../assets/assets'
 import { api } from '../api/client'
+import DemoNotice from './DemoNotice'
 
 const EMPLOYMENT_STATUSES = ["ACTIVE", "INACTIVE", "ON_LEAVE", "TERMINATED"]
 
@@ -75,14 +76,11 @@ const EmployeeForm = ({ initialData, onSuccess, onCancel }) => {
           Personal Information
         </h3>
         {isDemoEmployee && (
-          <div className="flex items-start gap-3 rounded-xl border border-amber-200 bg-amber-50 p-3.5 mb-6 text-sm text-amber-800">
-            <LockIcon className="w-4 h-4 mt-0.5 shrink-0" />
-            <p>
-              This is the <span className="font-medium">shared demo employee</span>. Its name and
-              email are locked so the published sign-in keeps working — the rest of the profile
-              is still editable.
-            </p>
-          </div>
+          <DemoNotice className="rounded-xl p-3.5 mb-6">
+            This is the <span className="font-medium">shared demo employee</span>. Its name and
+            email are locked so the published sign-in keeps working — the rest of the profile
+            is still editable.
+          </DemoNotice>
         )}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 text-sm text-slate-700">
           <div>

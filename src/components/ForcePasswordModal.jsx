@@ -1,17 +1,15 @@
 import React, { useState } from 'react'
 import { createPortal } from 'react-dom'
-import { EyeIcon, EyeOffIcon, KeyRoundIcon, Loader2Icon } from 'lucide-react'
+import { KeyRoundIcon, Loader2Icon } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { api } from '../api/client'
 import { useAuth } from '../context/AuthContext'
+import PasswordInput from './PasswordInput'
 
 const ForcePasswordModal = () => {
 
     const { mustChangePassword, markPasswordChanged } = useAuth()
     const [loading, setLoading] = useState(false)
-    const [showCurrent, setShowCurrent] = useState(false)
-    const [showNew, setShowNew] = useState(false)
-    const [showConfirm, setShowConfirm] = useState(false)
 
     if (!mustChangePassword) return null
 
@@ -61,63 +59,19 @@ const ForcePasswordModal = () => {
                 </div>
 
                 <form onSubmit={handleSubmit} className="space-y-4 text-sm text-slate-700">
-                    <div>
-                        <label className="block mb-2">Temporary Password</label>
-                        <div className="relative">
-                            <input
-                                type={showCurrent ? "text" : "password"}
-                                name="currentPassword"
-                                required
-                                autoFocus
-                                className="pr-11"
-                            />
-                            <button
-                                type="button"
-                                onClick={() => setShowCurrent(!showCurrent)}
-                                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
-                            >
-                                {showCurrent ? <EyeOffIcon size={18} /> : <EyeIcon size={18} />}
-                            </button>
-                        </div>
-                    </div>
-                    <div>
-                        <label className="block mb-2">New Password</label>
-                        <div className="relative">
-                            <input
-                                type={showNew ? "text" : "password"}
-                                name="newPassword"
-                                required
-                                minLength={8}
-                                className="pr-11"
-                            />
-                            <button
-                                type="button"
-                                onClick={() => setShowNew(!showNew)}
-                                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
-                            >
-                                {showNew ? <EyeOffIcon size={18} /> : <EyeIcon size={18} />}
-                            </button>
-                        </div>
-                    </div>
-                    <div>
-                        <label className="block mb-2">Confirm New Password</label>
-                        <div className="relative">
-                            <input
-                                type={showConfirm ? "text" : "password"}
-                                name="confirmPassword"
-                                required
-                                minLength={8}
-                                className="pr-11"
-                            />
-                            <button
-                                type="button"
-                                onClick={() => setShowConfirm(!showConfirm)}
-                                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
-                            >
-                                {showConfirm ? <EyeOffIcon size={18} /> : <EyeIcon size={18} />}
-                            </button>
-                        </div>
-                    </div>
+                    <PasswordInput
+                        label="Temporary Password"
+                        name="currentPassword"
+                        required
+                        autoFocus
+                    />
+                    <PasswordInput label="New Password" name="newPassword" required minLength={8} />
+                    <PasswordInput
+                        label="Confirm New Password"
+                        name="confirmPassword"
+                        required
+                        minLength={8}
+                    />
 
                     <button
                         type="submit"

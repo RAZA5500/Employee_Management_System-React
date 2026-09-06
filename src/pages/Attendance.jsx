@@ -4,6 +4,8 @@ import toast from 'react-hot-toast'
 import { api } from '../api/client'
 import { useAuth } from '../context/AuthContext'
 import { getDayTypeDisplay, getWorkingHoursDisplay } from '../assets/assets'
+import EmptyState from '../components/EmptyState'
+import PageHeader from '../components/PageHeader'
 
 const formatDate = (date) =>
   new Date(date).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })
@@ -72,37 +74,35 @@ const Attendance = () => {
 
   return (
     <div className="animate-fade-in">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
-        <div>
-          <h1 className="page-title">Attendance</h1>
-          <p className="page-subtitle">
-            {isAdmin ? "View attendance records for all employees" : "Track your daily check-in and check-out"}
-          </p>
-        </div>
-        {!isAdmin && (
-          <div>
-            {!todayRecord ? (
-              <button
-                onClick={handleCheckIn}
-                disabled={actionLoading}
-                className="btn-primary flex items-center gap-2 disabled:opacity-50"
-              >
-                <LogInIcon size={16} /> Check In
-              </button>
-            ) : !todayRecord.checkOut ? (
-              <button
-                onClick={handleCheckOut}
-                disabled={actionLoading}
-                className="btn-primary flex items-center gap-2 disabled:opacity-50"
-              >
-                <LogOutIcon size={16} /> Check Out
-              </button>
-            ) : (
-              <span className="badge badge-success">Checked out for today</span>
-            )}
-          </div>
-        )}
-      </div>
+      <PageHeader
+        title="Attendance"
+        subtitle={isAdmin ? "View attendance records for all employees" : "Track your daily check-in and check-out"}
+        action={
+          !isAdmin && (
+            <div>
+              {!todayRecord ? (
+                <button
+                  onClick={handleCheckIn}
+                  disabled={actionLoading}
+                  className="btn-primary flex items-center gap-2 disabled:opacity-50"
+                >
+                  <LogInIcon size={16} /> Check In
+                </button>
+              ) : !todayRecord.checkOut ? (
+                <button
+                  onClick={handleCheckOut}
+                  disabled={actionLoading}
+                  className="btn-primary flex items-center gap-2 disabled:opacity-50"
+                >
+                  <LogOutIcon size={16} /> Check Out
+                </button>
+              ) : (
+                <span className="badge badge-success">Checked out for today</span>
+              )}
+            </div>
+          )
+        }
+      />
 
       {loading ? (
         <div className="card overflow-x-auto">
@@ -132,9 +132,7 @@ const Attendance = () => {
           </table>
         </div>
       ) : records.length === 0 ? (
-        <p className="text-center py-16 text-slate-400 bg-white rounded-2xl border-dashed border-slate-200">
-          No attendance records found
-        </p>
+        <EmptyState message="No attendance records found" />
       ) : (
         <div className="card overflow-x-auto">
           <table className="table-modern">

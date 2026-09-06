@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { Plus, Search, X } from 'lucide-react'
+import { Plus, Search } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { api } from '../api/client'
 import { useAuth } from '../context/AuthContext'
@@ -7,6 +7,9 @@ import { LEAVE_STATUSES } from '../assets/assets'
 import LeaveForm from '../components/LeaveForm'
 import LeaveActionsMenu from '../components/LeaveActionsMenu'
 import ConfirmDialog from '../components/ConfirmDialog'
+import EmptyState from '../components/EmptyState'
+import Modal from '../components/Modal'
+import PageHeader from '../components/PageHeader'
 
 const STATUS_BADGE = {
   PENDING: "badge-warning",
@@ -90,18 +93,18 @@ const Leave = () => {
     <div className="animate-fade-in">
       {/* ==== header ==== */}
 
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
-        <div>
-          <h1 className="page-title">Leave</h1>
-          <p className="page-subtitle">Manage leave requests</p>
-        </div>
-        <button
-          onClick={() => setShowApplyModal(true)}
-          className="btn-primary flex items-center gap-2 w-full sm:w-auto justify-center"
-        >
-          <Plus size={16} /> Apply Leave
-        </button>
-      </div>
+      <PageHeader
+        title="Leave"
+        subtitle="Manage leave requests"
+        action={
+          <button
+            onClick={() => setShowApplyModal(true)}
+            className="btn-primary flex items-center gap-2 w-full sm:w-auto justify-center"
+          >
+            <Plus size={16} /> Apply Leave
+          </button>
+        }
+      />
 
       {/* ==== search bar ==== */}
 
@@ -163,9 +166,7 @@ const Leave = () => {
           </table>
         </div>
       ) : filtered.length === 0 ? (
-        <p className="text-center py-16 text-slate-400 bg-white rounded-2xl border-dashed border-slate-200">
-          No leave requests found
-        </p>
+        <EmptyState message="No leave requests found" />
       ) : (
         <div className="card overflow-x-auto">
           <table className="table-modern">
@@ -217,68 +218,30 @@ const Leave = () => {
 
       {/* apply leave modal */}
 
-      {showApplyModal && (
-        <div
-          onClick={() => setShowApplyModal(false)}
-          className="fixed bg-black/40 backdrop-blur-sm inset-0 z-50 flex items-start justify-center p-4 overflow-y-auto"
-        >
-          <div
-            className="relative bg-white rounded-2xl shadow-2xl w-full max-w-3xl my-8 animate-fade-in"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="flex items-center justify-between p-6 pb-0">
-              <div>
-                <h2 className="text-lg font-semibold text-slate-900">Apply for Leave</h2>
-                <p className="text-sm text-slate-500 mt-0.5">Submit a new leave request</p>
-              </div>
-              <button
-                onClick={() => setShowApplyModal(false)}
-                className="p-2 rounded-lg hover:bg-slate-100 transition-colors text-slate-400 hover:text-slate-600"
-              >
-                <X className="w-5 h-5 text-rose-600" />
-              </button>
-            </div>
-            <div className="p-6">
-              <LeaveForm onSuccess={handleApplyLeave} onCancel={() => setShowApplyModal(false)} />
-            </div>
-          </div>
-        </div>
-      )}
+      <Modal
+        open={showApplyModal}
+        title="Apply for Leave"
+        subtitle="Submit a new leave request"
+        onClose={() => setShowApplyModal(false)}
+      >
+        <LeaveForm onSuccess={handleApplyLeave} onCancel={() => setShowApplyModal(false)} />
+      </Modal>
 
       {/* edit leave modal */}
 
-      {editLeave && (
-        <div
-          onClick={() => setEditLeave(null)}
-          className="fixed bg-black/40 backdrop-blur-sm inset-0 z-50 flex items-start justify-center p-4 overflow-y-auto"
-        >
-          <div
-            className="relative bg-white rounded-2xl shadow-2xl w-full max-w-3xl my-8 animate-fade-in"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="flex items-center justify-between p-6 pb-0">
-              <div>
-                <h2 className="text-lg font-semibold text-slate-900">Edit Leave Request</h2>
-                <p className="text-sm text-slate-500 mt-0.5">Update the leave request details</p>
-              </div>
-              <button
-                onClick={() => setEditLeave(null)}
-                className="p-2 rounded-lg hover:bg-slate-100 transition-colors text-slate-400 hover:text-slate-600"
-              >
-                <X className="w-5 h-5 text-rose-600" />
-              </button>
-            </div>
-            <div className="p-6">
-              <LeaveForm
-                initialData={editLeave}
-                isAdmin={isAdmin}
-                onSuccess={handleUpdateLeave}
-                onCancel={() => setEditLeave(null)}
-              />
-            </div>
-          </div>
-        </div>
-      )}
+      <Modal
+        open={!!editLeave}
+        title="Edit Leave Request"
+        subtitle="Update the leave request details"
+        onClose={() => setEditLeave(null)}
+      >
+        <LeaveForm
+          initialData={editLeave}
+          isAdmin={isAdmin}
+          onSuccess={handleUpdateLeave}
+          onCancel={() => setEditLeave(null)}
+        />
+      </Modal>
 
       <ConfirmDialog
         open={!!deleteLeaveId}

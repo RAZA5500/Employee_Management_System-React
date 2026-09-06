@@ -1,12 +1,15 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Plus, PrinterIcon, ReceiptIcon, Search, Trash2Icon, UsersIcon, WalletIcon, X } from 'lucide-react'
+import { Plus, PrinterIcon, ReceiptIcon, Search, Trash2Icon, UsersIcon, WalletIcon } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { api } from '../api/client'
 import { useAuth } from '../context/AuthContext'
 import { MONTH_NAMES } from '../assets/assets'
 import PayslipForm from '../components/PayslipForm'
 import ConfirmDialog from '../components/ConfirmDialog'
+import EmptyState from '../components/EmptyState'
+import Modal from '../components/Modal'
+import PageHeader from '../components/PageHeader'
 
 const formatCurrency = (value) =>
   Number(value || 0).toLocaleString(undefined, { style: "currency", currency: "USD" })
@@ -75,20 +78,20 @@ const PaySlips = () => {
     <div className="animate-fade-in">
       {/* ==== header ==== */}
 
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
-        <div>
-          <h1 className="page-title">Payslips</h1>
-          <p className="page-subtitle">Generate and manage employee payslips</p>
-        </div>
-        {isAdmin && (
-          <button
-            onClick={() => setShowGenerateModal(true)}
-            className="btn-primary flex items-center gap-2 w-full sm:w-auto justify-center"
-          >
-            <Plus size={16} /> Generate Payslip
-          </button>
-        )}
-      </div>
+      <PageHeader
+        title="Payslips"
+        subtitle="Generate and manage employee payslips"
+        action={
+          isAdmin && (
+            <button
+              onClick={() => setShowGenerateModal(true)}
+              className="btn-primary flex items-center gap-2 w-full sm:w-auto justify-center"
+            >
+              <Plus size={16} /> Generate Payslip
+            </button>
+          )
+        }
+      />
 
       {/* ==== stats ==== */}
 
@@ -189,9 +192,7 @@ const PaySlips = () => {
           </table>
         </div>
       ) : filtered.length === 0 ? (
-        <p className="text-center py-16 text-slate-400 bg-white rounded-2xl border-dashed border-slate-200">
-          No payslips found
-        </p>
+        <EmptyState message="No payslips found" />
       ) : (
         <div className="card overflow-x-auto">
           <table className="table-modern">
@@ -251,33 +252,14 @@ const PaySlips = () => {
 
       {/* generate payslip modal */}
 
-      {showGenerateModal && (
-        <div
-          onClick={() => setShowGenerateModal(false)}
-          className="fixed bg-black/40 backdrop-blur-sm inset-0 z-50 flex items-start justify-center p-4 overflow-y-auto"
-        >
-          <div
-            className="relative bg-white rounded-2xl shadow-2xl w-full max-w-3xl my-8 animate-fade-in"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="flex items-center justify-between p-6 pb-0">
-              <div>
-                <h2 className="text-lg font-semibold text-slate-900">Generate Payslip</h2>
-                <p className="text-sm text-slate-500 mt-0.5">Create a new payslip for an employee</p>
-              </div>
-              <button
-                onClick={() => setShowGenerateModal(false)}
-                className="p-2 rounded-lg hover:bg-slate-100 transition-colors text-slate-400 hover:text-slate-600"
-              >
-                <X className="w-5 h-5 text-rose-600" />
-              </button>
-            </div>
-            <div className="p-6">
-              <PayslipForm onSuccess={handleGeneratePayslip} onCancel={() => setShowGenerateModal(false)} />
-            </div>
-          </div>
-        </div>
-      )}
+      <Modal
+        open={showGenerateModal}
+        title="Generate Payslip"
+        subtitle="Create a new payslip for an employee"
+        onClose={() => setShowGenerateModal(false)}
+      >
+        <PayslipForm onSuccess={handleGeneratePayslip} onCancel={() => setShowGenerateModal(false)} />
+      </Modal>
 
       <ConfirmDialog
         open={!!deletePayslipId}
